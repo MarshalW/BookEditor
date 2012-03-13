@@ -44,16 +44,22 @@ function initApp() {
                                 canvas.appendTo($(b));
 
                                 var image = new Image();//创建图片，图片内容是拖拽文件
+                                image.onload=function(){
+                                    var context=canvas[0].getContext('2d');//图片写入canvas
+                                    context.drawImage(image,0,0,image.width*.5,image.height*.5);
+
+                                    var newImage=new Image();//创建新图片，内容来源于canvas
+                                    newImage.onload=function(){
+                                        $(newImage).appendTo($(b));
+                                    };
+                                    newImage.src=canvas[0].toDataURL('image/jpeg');
+
+
+                                    canvas.remove();//删除canvas
+                                };
                                 image.src=e.target.result;
 
-                                var context=canvas[0].getContext('2d');//图片写入canvas
-                                context.drawImage(image,0,0,image.width*.5,image.height*.5);
 
-                                var newImage=new Image();//创建新图片，内容来源于canvas
-                                newImage.src=canvas[0].toDataURL('image/jpeg');
-                                $(newImage).appendTo($(b));
-
-                                canvas.remove();//删除canvas
                             };
                         })(file);
 
